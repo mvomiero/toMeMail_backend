@@ -4,6 +4,7 @@ import com.example.toMeMail.entity.Message;
 import com.example.toMeMail.entity.User;
 import com.example.toMeMail.repository.MessageRepository;
 import com.example.toMeMail.repository.UserRepository;
+import com.example.toMeMail.service.CustomUserDetailsService;
 import com.example.toMeMail.util.TestDataFactory;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -15,6 +16,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.LocalDateTime;
 
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -31,6 +33,9 @@ class MessageControllerIntegrationTest {
 
     @Autowired
     private MessageRepository messageRepository;
+
+    @Autowired
+    private CustomUserDetailsService customUserDetailsService;
 
     private User testUser;
 
@@ -108,6 +113,11 @@ class MessageControllerIntegrationTest {
     }
 
     @Test
+    public void contextLoads() {
+        assertNotNull(customUserDetailsService, "CustomUserDetailsService bean should be loaded");
+    }
+
+    @Test
     void deleteMessage() throws Exception {
 
         Message message = TestDataFactory.createTestMessage(
@@ -122,4 +132,6 @@ class MessageControllerIntegrationTest {
                 .andDo(print())
                 .andExpect(status().isNoContent());
     }
+
+
 }
