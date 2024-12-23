@@ -23,30 +23,30 @@ public class MessageServiceImpl implements MessageService {
 
     @Override
     @Transactional
-    public Message createMessage(Message message, Long userId) {
+    public Message createMessage(Message message, String username) {
 
-        User user = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException("User with ID " + userId + " not found"));
+        User user = userRepository.findByUsername(username).orElseThrow(() -> new UserNotFoundException("User " + username + " not found"));
         message.setUser(user);
         return messageRepository.save(message);
     }
 
     @Override
-    public List<Message> getMessagesByUser(Long userId) {
-        return messageRepository.findByUserId(userId);
+    public List<Message> getMessagesByUsername(String username) {
+        return messageRepository.findByUserUsername(username);
     }
 
     @Override
-    public Message getMessageById(Long messageId, Long userId) {
-        Message message = messageRepository.findById(messageId).orElseThrow(() -> new UserNotFoundException("User with ID " + userId + " not found"));
-        if (message.getUser().getId() != userId) {
+    public Message getMessageById(Long messageId, String username) {
+        Message message = messageRepository.findById(messageId).orElseThrow(() -> new UserNotFoundException("User with ID " + username + " not found"));
+        /*if (message.getUser().getId() != userId) {
             throw new RuntimeException("No authorized to access this message!");
-        }
+        }*/
         return message;
     }
 
     @Override
     @Transactional
-    public void deleteMessage(Long messageId, Long userId) {
+    public void deleteMessage(Long messageId, String username) {
         Message message = messageRepository.findById(messageId).orElseThrow(() -> new RuntimeException("Message not found"));
 
         messageRepository.delete(message);

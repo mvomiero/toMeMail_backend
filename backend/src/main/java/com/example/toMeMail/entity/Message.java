@@ -1,10 +1,14 @@
 package com.example.toMeMail.entity;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
 @Entity
+@AllArgsConstructor
+@NoArgsConstructor
 @Table(name = "messages")
 public class Message {
 
@@ -25,6 +29,12 @@ public class Message {
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
+
+    public Message(String content, LocalDateTime dueDate, User user) {
+        this.content = content;
+        this.dueDate = dueDate;
+        this.user = user;
+    }
 
     // Getters and Setters
 

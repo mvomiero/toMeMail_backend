@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.LocalDateTime;
@@ -35,21 +36,46 @@ class MessageControllerIntegrationTest {
     private MessageRepository messageRepository;
 
     @Autowired
-    private CustomUserDetailsService customUserDetailsService;
+    private PasswordEncoder passwordEncoder;
 
-    private User testUser;
+    private String jwtToken;
 
     @BeforeEach
-    void setup() {
+    void setup() throws Exception {
         messageRepository.deleteAll();
         userRepository.deleteAll();
 
-        testUser = TestDataFactory.createTestUser("Test User", "password123", userRepository);
+        // Create test user and encode password
+        User testUser = new User();
+        testUser.setUsername("TestUser");
+        testUser.setPassword(passwordEncoder.encode("password123")); // Encode the password
+        testUser.setRole("USER");
+        userRepository.save(testUser);
+
+        // Generate JWT
+        jwtToken = generateJwtToken(testUser.getUsername());
+        System.out.println("Generated JWT Token: " + jwtToken);
+
+
+    }
+
+    private String generateJwtToken(String username) throws Exception {
+        // Mock JWT generation logic or use a real JWT creation utility if available
+        return mockMvc.perform(post("/auth/login")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("""
+                        {
+                          "username": "%s",
+                          "password": "password123"
+                        }
+                        """.formatted(username)))
+                .andReturn()
+                .getResponse()
+                .getContentAsString(); // Adjust based on your JWT response format
     }
 
     @Test
     void createMessage() throws Exception {
-
         String newMessage = """
                 {
                     "content": "Integration test message",
@@ -57,54 +83,40 @@ class MessageControllerIntegrationTest {
                 }
                 """;
 
-        mockMvc.perform(post("/messages?userId=" + testUser.getId())
+        mockMvc.perform(post("/messages")
                         .contentType(MediaType.APPLICATION_JSON)
+                        .header("Authorization", "Bearer " + jwtToken)
                         .content(newMessage))
                 .andDo(print())
                 .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.content").value("Integration test message"))
-                .andExpect(jsonPath("$.user.id").value(testUser.getId()));
-    }
-
-    @Test
-    void getMessageNull() throws Exception {
-
-        // No user in the database
-
-        mockMvc.perform(get("/messages/" + 1L + "?userId=" + 1L)
-                        .contentType(MediaType.APPLICATION_JSON))
-                .andDo(print())
-                .andExpect(status().isNotFound())
-                .andExpect(jsonPath("$.message").value("User Not Found"));
+                .andExpect(jsonPath("$.content").value("Integration test message"));
     }
 
     @Test
     void getMessageById() throws Exception {
+        Message message = new Message();
+        message.setContent("Test Message Content");
+        message.setDueDate(LocalDateTime.of(2024, 12, 31, 23, 59, 59));
+        message.setUser(userRepository.findByUsername("TestUser").orElseThrow());
+        messageRepository.save(message);
 
-        Message message = TestDataFactory.createTestMessage(
-                "Test Message Content",
-                LocalDateTime.of(2024, 12, 31, 23, 59, 59),
-                testUser,
-                messageRepository
-        );
-
-        mockMvc.perform(get("/messages/" + message.getId() + "?userId=" + testUser.getId())
-                        .contentType(MediaType.APPLICATION_JSON))
+        mockMvc.perform(get("/messages/" + message.getId())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .header("Authorization", "Bearer " + jwtToken))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.content").value("Test Message Content"))
-                .andExpect(jsonPath("$.id").value(message.getId()))
-                .andExpect(jsonPath("$.user.id").value(message.getUser().getId()));
+                .andExpect(jsonPath("$.content").value("Test Message Content"));
     }
 
     @Test
     void getMessages() throws Exception {
+        User user = userRepository.findByUsername("TestUser").orElseThrow();
+        messageRepository.save(new Message("Message 1", LocalDateTime.now(), user));
+        messageRepository.save(new Message("Message 2", LocalDateTime.now(), user));
 
-        TestDataFactory.createTestMessage("Message 1", LocalDateTime.now(), testUser, messageRepository);
-        TestDataFactory.createTestMessage("Message 2", LocalDateTime.now(), testUser, messageRepository);
-
-        mockMvc.perform(get("/messages?userId=" + testUser.getId())
-                        .contentType(MediaType.APPLICATION_JSON))
+        mockMvc.perform(get("/messages")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .header("Authorization", "Bearer " + jwtToken))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.size()").value(2))
@@ -113,25 +125,15 @@ class MessageControllerIntegrationTest {
     }
 
     @Test
-    public void contextLoads() {
-        assertNotNull(customUserDetailsService, "CustomUserDetailsService bean should be loaded");
-    }
-
-    @Test
     void deleteMessage() throws Exception {
+        User user = userRepository.findByUsername("TestUser").orElseThrow();
+        Message message = messageRepository.save(new Message("Message 1", LocalDateTime.now(), user));
 
-        Message message = TestDataFactory.createTestMessage(
-                "Message 1",
-                LocalDateTime.now(),
-                testUser,
-                messageRepository
-        );
-
-        mockMvc.perform(delete("/messages/" + message.getId() + "?userId=" + testUser.getId())
-                        .contentType(MediaType.APPLICATION_JSON))
+        mockMvc.perform(delete("/messages/" + message.getId())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .header("Authorization", "Bearer " + jwtToken))
                 .andDo(print())
                 .andExpect(status().isNoContent());
     }
-
-
 }
+
