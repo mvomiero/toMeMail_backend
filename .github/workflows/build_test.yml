@@ -37,9 +37,7 @@ jobs:
             ${{ runner.os }}-maven
 
       - name: Build Backend with Maven
-        run: |  
-          echo "SECRET_KEY is set and has length: ${#SECRET_KEY}"
-          cd backend && mvn clean install
+        run: cd backend && mvn clean install
 
       - name: Run Backend Tests
         run: cd backend && mvn test
