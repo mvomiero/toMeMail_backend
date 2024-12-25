@@ -9,6 +9,9 @@ on:
       - main
   workflow_dispatch:
 
+env:
+  SECRET_KEY: ${{ secrets.SECRET_KEY }}
+
 jobs:
   build-and-test:
     runs-on: ubuntu-latest
@@ -33,12 +36,10 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-maven
 
-      #- name: Build Backend with Maven
-      #  run: cd backend && mvn clean install
+      - name: Build Backend with Maven
+        run: |  
+          echo "SECRET_KEY is set and has length: ${#SECRET_KEY}"
+          cd backend && mvn clean install
 
       - name: Run Backend Tests
-        env:
-          SECRET_KEY: ${{ secrets.SECRET_KEY }}
-        run: |
-          echo "SECRET_KEY is: $SECRET_KEY"
-          # cd backend && mvn test
+        run: cd backend && mvn test
