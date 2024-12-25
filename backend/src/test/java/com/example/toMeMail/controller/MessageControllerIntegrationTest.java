@@ -38,24 +38,23 @@ class MessageControllerIntegrationTest {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    @Autowired
+    private TestDataFactory testDataFactory;
+
     private String jwtToken;
+
+    private User testUser;
 
     @BeforeEach
     void setup() throws Exception {
         messageRepository.deleteAll();
         userRepository.deleteAll();
 
-        // Create test user and encode password
-        User testUser = new User();
-        testUser.setUsername("TestUser");
-        testUser.setPassword(passwordEncoder.encode("password123")); // Encode the password
-        testUser.setRole("USER");
-        userRepository.save(testUser);
+        testUser = testDataFactory.createTestUser("TestUser", "password123", "USER");
 
         // Generate JWT
         jwtToken = generateJwtToken(testUser.getUsername());
         System.out.println("Generated JWT Token: " + jwtToken);
-
 
     }
 
@@ -75,7 +74,7 @@ class MessageControllerIntegrationTest {
     }
 
     @Test
-    void createMessage() throws Exception {
+    void createMessage_shouldReturnCreated() throws Exception {
         String newMessage = """
                 {
                     "content": "Integration test message",
@@ -93,12 +92,9 @@ class MessageControllerIntegrationTest {
     }
 
     @Test
-    void getMessageById() throws Exception {
-        Message message = new Message();
-        message.setContent("Test Message Content");
-        message.setDueDate(LocalDateTime.of(2024, 12, 31, 23, 59, 59));
-        message.setUser(userRepository.findByUsername("TestUser").orElseThrow());
-        messageRepository.save(message);
+    void getMessageById_shouldReturnOk() throws Exception {
+
+        Message message = testDataFactory.createTestMessage("Test Message Content", LocalDateTime.now(), testUser);
 
         mockMvc.perform(get("/messages/" + message.getId())
                         .contentType(MediaType.APPLICATION_JSON)
@@ -109,10 +105,24 @@ class MessageControllerIntegrationTest {
     }
 
     @Test
-    void getMessages() throws Exception {
-        User user = userRepository.findByUsername("TestUser").orElseThrow();
-        messageRepository.save(new Message("Message 1", LocalDateTime.now(), user));
-        messageRepository.save(new Message("Message 2", LocalDateTime.now(), user));
+    void getMessageById_withWrongUser_shouldReturnForbidden() throws Exception {
+
+        User user2 = testDataFactory.createTestUser("TestUser2", "password123", "USER");
+
+        Message message = testDataFactory.createTestMessage("Message 1", LocalDateTime.now(), user2);
+
+        mockMvc.perform(get("/messages/" + message.getId())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .header("Authorization", "Bearer " + jwtToken))
+                .andDo(print())
+                .andExpect(status().isForbidden());
+    }
+
+    @Test
+    void getMessages_shouldReturnOk() throws Exception {
+
+        testDataFactory.createTestMessage("Message 1", LocalDateTime.now(), testUser);
+        testDataFactory.createTestMessage("Message 2", LocalDateTime.now(), testUser);
 
         mockMvc.perform(get("/messages")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -125,9 +135,9 @@ class MessageControllerIntegrationTest {
     }
 
     @Test
-    void deleteMessage() throws Exception {
-        User user = userRepository.findByUsername("TestUser").orElseThrow();
-        Message message = messageRepository.save(new Message("Message 1", LocalDateTime.now(), user));
+    void deleteMessage_shouldReturnOkNoContent() throws Exception {
+
+        Message message = testDataFactory.createTestMessage("Message 1", LocalDateTime.now(), testUser);
 
         mockMvc.perform(delete("/messages/" + message.getId())
                         .contentType(MediaType.APPLICATION_JSON)

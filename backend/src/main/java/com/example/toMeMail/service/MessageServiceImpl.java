@@ -42,10 +42,7 @@ public class MessageServiceImpl implements MessageService {
     @Override
     public Message getMessageById(Long messageId) {
         Message message = messageRepository.findById(messageId).orElseThrow(() -> new UserNotFoundException("User not found"));
-        /*if (message.getUser().getId() != userId) {
-            throw new RuntimeException("No authorized to access this message!");
-        }*/
-        // Check if the message belongs to the authenticated user
+
         if (!message.getUser().getUsername().equals(getAuthenticatedUsername())) {
             throw new AccessDeniedException("You are not authorized to access this message");
         }
