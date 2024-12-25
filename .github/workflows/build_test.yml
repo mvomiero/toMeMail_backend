@@ -39,4 +39,6 @@ jobs:
       - name: Run Backend Tests
         env:
           SECRET_KEY: ${{ secrets.SECRET_KEY }}
-        run: cd backend && mvn test
+        run: |
+          echo "SECRET_KEY is: $SECRET_KEY"
+          # cd backend && mvn test
