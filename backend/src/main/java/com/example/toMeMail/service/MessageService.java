@@ -6,8 +6,8 @@ import java.util.List;
 
 public interface MessageService {
 
-    Message createMessage(Message message, String username);
-    List<Message> getMessagesByUsername(String username);
-    Message getMessageById(Long messageId, String username);
-    void deleteMessage(Long messageId, String username);
+    Message createMessage(Message message);
+    List<Message> getMessagesByUsername();
+    Message getMessageById(Long messageId);
+    void deleteMessage(Long messageId);
 }

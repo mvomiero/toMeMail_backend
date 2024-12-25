@@ -23,28 +23,28 @@ public class MessageController {
     @PostMapping
     public ResponseEntity<Message> createMessage(@RequestBody Message message) {
         String username = getAuthenticatedUsername();
-        Message createdMessage = messageService.createMessage(message, username);
+        Message createdMessage = messageService.createMessage(message);
         return new ResponseEntity<>(createdMessage, HttpStatus.CREATED);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<Message> getMessageById(@PathVariable Long id) {
-        String username = getAuthenticatedUsername();
-        Message message = messageService.getMessageById(id, username);
+        //String username = getAuthenticatedUsername();
+        Message message = messageService.getMessageById(id);
         return new ResponseEntity<>(message, HttpStatus.OK);
     }
 
     @GetMapping
     public ResponseEntity<List<Message>> getMessages() {
         String username = getAuthenticatedUsername();
-        List<Message> messages = messageService.getMessagesByUsername(username);
+        List<Message> messages = messageService.getMessagesByUsername();
         return new ResponseEntity<>(messages, HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteMessage(@PathVariable Long id) {
         String username = getAuthenticatedUsername();
-        messageService.deleteMessage(id, username);
+        messageService.deleteMessage(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
