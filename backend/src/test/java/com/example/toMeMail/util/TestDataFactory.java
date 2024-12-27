@@ -21,8 +21,8 @@ public class TestDataFactory {
     public User createTestUser(String username, String password, String role) {
         User user = new User();
         user.setUsername(username);
-        user.setPassword(passwordEncoder.encode(password)); // Encode the password
-        user.setRole(role); // Default role
+        user.setPassword(passwordEncoder.encode(password));
+        user.setRole(role);
         return userRepository.save(user);
     }
 
