@@ -2,6 +2,7 @@ package com.example.toMeMail.controller;
 
 import com.example.toMeMail.entity.Message;
 import com.example.toMeMail.entity.User;
+import com.example.toMeMail.exception.MessageAccessBeforeDueDateException;
 import com.example.toMeMail.repository.MessageRepository;
 import com.example.toMeMail.repository.UserRepository;
 import com.example.toMeMail.service.CustomUserDetailsService;
@@ -54,7 +55,7 @@ class MessageControllerIntegrationTest {
 
         // Generate JWT
         jwtToken = generateJwtToken(testUser.getUsername());
-        System.out.println("Generated JWT Token: " + jwtToken);
+        //System.out.println("Generated JWT Token: " + jwtToken);
 
     }
 
@@ -102,6 +103,20 @@ class MessageControllerIntegrationTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.content").value("Test Message Content"));
+    }
+
+    @Test
+    void getMessageById_withLaterDate_shouldReturnForbidden() throws Exception {
+
+        Message message = testDataFactory.createTestMessage("Test Message Content", LocalDateTime.now().plusYears(100), testUser);
+
+        mockMvc.perform(get("/messages/" + message.getId())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .header("Authorization", "Bearer " + jwtToken))
+                .andDo(print())
+                .andExpect(status().isForbidden())
+                .andExpect(content().string(MessageAccessBeforeDueDateException.MESSAGE));  // Ensure the message is returned correctly
+
     }
 
     @Test

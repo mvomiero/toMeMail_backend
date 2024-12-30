@@ -2,6 +2,7 @@ package com.example.toMeMail.service;
 
 import com.example.toMeMail.entity.Message;
 import com.example.toMeMail.entity.User;
+import com.example.toMeMail.exception.MessageAccessBeforeDueDateException;
 import com.example.toMeMail.exception.UserNotFoundException;
 import com.example.toMeMail.repository.MessageRepository;
 import com.example.toMeMail.repository.UserRepository;
@@ -13,6 +14,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -45,6 +47,9 @@ public class MessageServiceImpl implements MessageService {
 
         if (!message.getUser().getUsername().equals(getAuthenticatedUsername())) {
             throw new AccessDeniedException("You are not authorized to access this message");
+        }
+        if (message.getDueDate().isAfter(LocalDateTime.now())) {
+            throw new MessageAccessBeforeDueDateException(MessageAccessBeforeDueDateException.MESSAGE);
         }
         return message;
     }
