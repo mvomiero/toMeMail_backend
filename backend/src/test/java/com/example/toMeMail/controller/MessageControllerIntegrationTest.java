@@ -93,6 +93,24 @@ class MessageControllerIntegrationTest {
     }
 
     @Test
+    void createMessage_withNoContent_shouldReturnBadRequest() throws Exception {
+        String newMessage = """
+                {
+                    "content": "",
+                    "dueDate": "2024-12-31T23:59:59"
+                }
+                """;
+
+        mockMvc.perform(post("/messages")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .header("Authorization", "Bearer " + jwtToken)
+                        .content(newMessage))
+                .andDo(print())
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.content").value("Content cannot be empty"));
+    }
+
+    @Test
     void getMessageById_shouldReturnOk() throws Exception {
 
         Message message = testDataFactory.createTestMessage("Test Message Content", LocalDateTime.now(), testUser);

@@ -1,7 +1,7 @@
 package com.example.toMeMail.controller;
 
-import com.example.toMeMail.dto.LoginRequest;
-import com.example.toMeMail.dto.RegisterRequest;
+import com.example.toMeMail.dto.LoginRequestDto;
+import com.example.toMeMail.dto.RegisterRequestDto;
 import com.example.toMeMail.security.util.JwtTokenUtil;
 import com.example.toMeMail.service.UserService;
 import lombok.AllArgsConstructor;
@@ -11,8 +11,6 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
-
-import javax.naming.AuthenticationException;
 
 @RestController
 @RequestMapping("/auth")
@@ -25,7 +23,7 @@ public class AuthController {
     private final UserService userService;
 
     @PostMapping("/login")
-    public String login(@RequestBody LoginRequest loginRequest) {
+    public String login(@RequestBody LoginRequestDto loginRequest) {
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         loginRequest.getUsername(),
@@ -41,7 +39,7 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<String> registerUser(@RequestBody RegisterRequest registerRequest) {
+    public ResponseEntity<String> registerUser(@RequestBody RegisterRequestDto registerRequest) {
         try {
             userService.registerUser(
                     registerRequest.getUsername(),

@@ -1,9 +1,11 @@
 package com.example.toMeMail.controller;
 
 
+import com.example.toMeMail.dto.MessageDto;
 import com.example.toMeMail.entity.Message;
 import com.example.toMeMail.security.CustomUserDetails;
 import com.example.toMeMail.service.MessageService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,7 +23,7 @@ public class MessageController {
     private MessageService messageService;
 
     @PostMapping
-    public ResponseEntity<Message> createMessage(@RequestBody Message message) {
+    public ResponseEntity<Message> createMessage(@Valid @RequestBody MessageDto message) {
 
         Message createdMessage = messageService.createMessage(message);
         return new ResponseEntity<>(createdMessage, HttpStatus.CREATED);

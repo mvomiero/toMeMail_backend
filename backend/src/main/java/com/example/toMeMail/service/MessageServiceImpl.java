@@ -1,5 +1,6 @@
 package com.example.toMeMail.service;
 
+import com.example.toMeMail.dto.MessageDto;
 import com.example.toMeMail.entity.Message;
 import com.example.toMeMail.entity.User;
 import com.example.toMeMail.exception.MessageAccessBeforeDueDateException;
@@ -29,7 +30,11 @@ public class MessageServiceImpl implements MessageService {
 
     @Override
     @Transactional
-    public Message createMessage(Message message) {
+    public Message createMessage(MessageDto messageDto) {
+
+        Message message = new Message();
+        message.setContent(messageDto.getContent());
+        message.setDueDate(messageDto.getDueDate());
 
         User user = userRepository.findByUsername(getAuthenticatedUsername()).orElseThrow(() -> new UserNotFoundException("User not found"));
         message.setUser(user);
