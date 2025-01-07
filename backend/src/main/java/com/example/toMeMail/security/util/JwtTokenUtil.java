@@ -17,7 +17,6 @@ import java.util.function.Function;
 public class JwtTokenUtil {
 
     @Value("${SECRET_KEY}") private String SECRET_KEY;
-    //private static final String SECRET_KEY="b3JtKHd9wh3oayDhtfjZXu8PzT4AeUsMfZkUQXqDkF8="; // TODO: replace with a strong secure key
     private static final long JWT_EXPIRATION = 1000 * 60 * 60; // 1 h in milliseconds
 
     // Generate a JWT token
