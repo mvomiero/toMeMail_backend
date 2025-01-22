@@ -2,6 +2,7 @@ package com.example.toMeMail.controller;
 
 import com.example.toMeMail.dto.LoginRequestDto;
 import com.example.toMeMail.dto.RegisterRequestDto;
+import com.example.toMeMail.dto.RegisterResponseDto;
 import com.example.toMeMail.security.util.JwtTokenUtil;
 import com.example.toMeMail.service.UserService;
 import lombok.AllArgsConstructor;
@@ -39,16 +40,16 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<String> registerUser(@RequestBody RegisterRequestDto registerRequest) {
+    public ResponseEntity<RegisterResponseDto> registerUser(@RequestBody RegisterRequestDto registerRequest) {
         try {
             userService.registerUser(
                     registerRequest.getUsername(),
                     registerRequest.getPassword(),
                     registerRequest.getRole()
             );
-            return ResponseEntity.status(HttpStatus.CREATED).body("User registered successfully");
+            return ResponseEntity.status(HttpStatus.CREATED).body(new RegisterResponseDto("User registered successfully"));
         } catch (IllegalArgumentException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new RegisterResponseDto(e.getMessage()));
         }
     }
 
