@@ -1,5 +1,6 @@
 package com.example.toMeMail.dto;
 
+import jakarta.annotation.Nullable;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
@@ -13,7 +14,8 @@ public class RegisterRequestDto {
     @Size(/*min = 6,*/ message = "Password must be at least 6 characters long")
     private String password;
 
-    @NotBlank(message = "Role cannot be empty")
+    //@NotBlank(message = "Role cannot be empty")
+    @Nullable
     private String role;
 
 }

@@ -41,11 +41,14 @@ public class AuthController {
 
     @PostMapping("/register")
     public ResponseEntity<RegisterResponseDto> registerUser(@RequestBody RegisterRequestDto registerRequest) {
+
+        String role = (registerRequest.getRole() == null || registerRequest.getRole().isBlank()) ? "USER" : registerRequest.getRole();
+
         try {
             userService.registerUser(
                     registerRequest.getUsername(),
                     registerRequest.getPassword(),
-                    registerRequest.getRole()
+                    role
             );
             return ResponseEntity.status(HttpStatus.CREATED).body(new RegisterResponseDto("User registered successfully"));
         } catch (IllegalArgumentException e) {
