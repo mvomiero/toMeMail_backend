@@ -1,6 +1,7 @@
 package com.example.toMeMail.controller;
 
 import com.example.toMeMail.dto.LoginRequestDto;
+import com.example.toMeMail.dto.LoginResponseDto;
 import com.example.toMeMail.dto.RegisterRequestDto;
 import com.example.toMeMail.dto.RegisterResponseDto;
 import com.example.toMeMail.security.util.JwtTokenUtil;
@@ -24,7 +25,7 @@ public class AuthController {
     private final UserService userService;
 
     @PostMapping("/login")
-    public String login(@RequestBody LoginRequestDto loginRequest) {
+    public ResponseEntity<LoginResponseDto> login(@RequestBody LoginRequestDto loginRequest) {
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         loginRequest.getUsername(),
@@ -32,11 +33,10 @@ public class AuthController {
                 )
         );
 
-        // Extract the username from the authenticated token
         String username = authentication.getName();
+        String token = jwtTokenUtil.generateToken(username);
 
-        // Generate and return the JWT token
-        return jwtTokenUtil.generateToken(username);
+        return ResponseEntity.ok(new LoginResponseDto(token));
     }
 
     @PostMapping("/register")

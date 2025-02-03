@@ -11,7 +11,7 @@ public class ToMeMailApplication {
 
 	public static void main(String[] args) {
 		ApplicationContext context = SpringApplication.run(ToMeMailApplication.class, args);
-		System.out.println(Arrays.toString(context.getBeanDefinitionNames()));
+		//System.out.println(Arrays.toString(context.getBeanDefinitionNames()));
 	}
 
 }
