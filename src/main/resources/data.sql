@@ -1,7 +1,9 @@
--- Insert users
-INSERT INTO USER (username, email, password, role) VALUES ('john_doe', 'john@example.com', 'password123', 'USER');
-INSERT INTO USER (username, email, password, role) VALUES ('jane_doe', 'jane@example.com', 'password123', 'USER');
+-- Insert Users with pre-hashed passwords
+INSERT INTO users (id, user_name, password, role) VALUES
+(1, 'alice', '$2a$10$P6BqKbu29rxQkzB2cPX.z.oANqBZ/TpQxA63HKUeYqGuxKKzBHiXC', 'USER'),
+-- password = 'testPassword'
 
--- Insert messages
-INSERT INTO MESSAGE (content, due_date, user_id) VALUES ('Hello John in the future!', '2030-01-01 10:00:00', 1);
-INSERT INTO MESSAGE (content, due_date, user_id) VALUES ('Hello Jane in the future!', '2035-01-01 10:00:00', 2);
+-- Insert Messages linked to users
+INSERT INTO messages (id, content, due_date, user_id) VALUES
+(1, 'Hello Future Alice!', '2025-01-01 10:00:00', 1),
+(2, 'Remember to invest!', '2030-06-15 12:00:00', 1),
