@@ -55,7 +55,7 @@ class AuthControllerTest {
                             }
                         """))
                 .andExpect(status().isOk())
-                .andExpect(content().string("mockJwtToken"));
+                .andExpect(jsonPath("$.token").value("mockJwtToken"));
 
     }
 }

@@ -7,6 +7,7 @@ import com.example.toMeMail.repository.MessageRepository;
 import com.example.toMeMail.repository.UserRepository;
 import com.example.toMeMail.service.CustomUserDetailsService;
 import com.example.toMeMail.util.TestDataFactory;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -61,7 +62,7 @@ class MessageControllerIntegrationTest {
 
     private String generateJwtToken(String username) throws Exception {
         // Mock JWT generation logic or use a real JWT creation utility if available
-        return mockMvc.perform(post("/auth/login")
+        String jsonResponse = mockMvc.perform(post("/auth/login")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("""
                         {
@@ -72,6 +73,8 @@ class MessageControllerIntegrationTest {
                 .andReturn()
                 .getResponse()
                 .getContentAsString(); // Adjust based on your JWT response format
+
+        return new ObjectMapper().readTree(jsonResponse).get("token").asText();
     }
 
     @Test

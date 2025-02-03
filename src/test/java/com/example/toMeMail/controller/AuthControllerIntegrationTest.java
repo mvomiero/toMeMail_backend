@@ -3,6 +3,7 @@ package com.example.toMeMail.controller;
 
 import com.example.toMeMail.entity.User;
 import com.example.toMeMail.repository.UserRepository;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -130,7 +131,8 @@ public class AuthControllerIntegrationTest {
                 .andExpect(status().isOk())
                 .andReturn();
 
-        String jwt = loginResult.getResponse().getContentAsString();
+        String jsonResponse = loginResult.getResponse().getContentAsString();
+        String jwt = new ObjectMapper().readTree(jsonResponse).get("token").asText();
 
         // Use the JWT to access the protected endpoint
         mockMvc.perform(get("/auth/protected")
