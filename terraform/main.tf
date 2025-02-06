@@ -85,3 +85,17 @@ resource "azurerm_mssql_firewall_rule" "allow_my_ip" {
   server_id           = azurerm_mssql_server.tome_mail_sql.id
 }
 
+resource "azurerm_static_web_app" "frontend" {
+  name                = "tome-mail-frontend"
+  resource_group_name = azurerm_resource_group.tome_mail_rg.name
+  location            = "westeurope"
+  sku_tier            = "Free"
+  sku_size            = "Free"
+}
+
+output "frontend_url" {
+  description = "The URL of the deployed frontend application"
+  value       = "https://${azurerm_static_web_app.frontend.default_host_name}"
+}
+
+
