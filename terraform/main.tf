@@ -39,7 +39,7 @@ resource "azurerm_linux_web_app" "backend" {
   }
 
   app_settings = {
-    "DATABASE_URL"         = "jdbc:sqlserver://${var.database_server_name}.database.windows.net:1433;databaseName=${var.database_name}"
+    "DATABASE_URL"         = "jdbc:sqlserver://${var.database_server_name}.database.windows.net:1433;database=${var.database_name};user=${var.database_username}@${var.database_server_name};password=${var.database_password};encrypt=true;trustServerCertificate=false;hostNameInCertificate=*.database.windows.net;loginTimeout=30;"
     "DATABASE_USERNAME"    = var.database_username
     "DATABASE_PASSWORD"    = var.database_password
     "SPRING_PROFILES_ACTIVE" = "azure"
