@@ -17,7 +17,9 @@ public class CorsConfig {
             public void addCorsMappings(CorsRegistry registry) {
 
                 registry.addMapping("/**")
-                        .allowedOrigins("https://icy-river-06c72c503.4.azurestaticapps.net")
+                        .allowedOrigins("https://icy-river-06c72c503.4.azurestaticapps.net",
+                                "http://localhost:4200",
+                                "http://localhost:3000")
                         .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                         .allowedHeaders("Authorization", "Content-Type")
                         .allowCredentials(true);
