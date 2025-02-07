@@ -3,6 +3,7 @@ package com.example.toMeMail.controller;
 
 import com.example.toMeMail.entity.User;
 import com.example.toMeMail.repository.UserRepository;
+import com.example.toMeMail.util.TestDataFactory;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -16,10 +17,11 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 
+import java.time.LocalDate;
+
 import static java.util.function.Predicate.not;
 import static org.hamcrest.Matchers.emptyOrNullString;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -38,6 +40,9 @@ public class AuthControllerIntegrationTest {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    @Autowired
+    private TestDataFactory testDataFactory;
+
     @BeforeEach
     void setup() {
         userRepository.deleteAll(); // Clean up database before each test
@@ -49,7 +54,8 @@ public class AuthControllerIntegrationTest {
             {
                 "username": "testUser",
                 "password": "testPassword",
-                "role": "USER"
+                "role": "USER",
+                "dateOfBirth": "1995-08-15"
             }
         """;
 
@@ -63,21 +69,20 @@ public class AuthControllerIntegrationTest {
         User savedUser = userRepository.findByUsername("testUser").orElse(null);
         assertNotNull(savedUser);
         assertTrue(passwordEncoder.matches("testPassword", savedUser.getPassword()));
+        assertEquals(LocalDate.of(1995, 8, 15), savedUser.getDateOfBirth());
     }
 
     @Test
     void login_withValidCredentials_shouldReturnJwtToken() throws Exception {
         // Register a user directly in the database
-        User user = new User();
-        user.setUsername("testUser");
-        user.setPassword(passwordEncoder.encode("testPassword"));
-        user.setRole("USER");
+        User user = testDataFactory.createTestUser("testUser", "testPassword", "USER", "1995-08-15");
         userRepository.save(user);
 
         String loginPayload = """
             {
                 "username": "testUser",
-                "password": "testPassword"
+                "password": "testPassword",
+                "dateOfBirth": "1995-08-15"
             }
         """;
 
@@ -112,16 +117,14 @@ public class AuthControllerIntegrationTest {
     @Test
     void accessProtectedEndpoint_withValidJwt_shouldReturnOk() throws Exception {
         // Register and login the user to get a JWT
-        User user = new User();
-        user.setUsername("testUser");
-        user.setPassword(passwordEncoder.encode("testPassword"));
-        user.setRole("USER");
+        User user = testDataFactory.createTestUser("testUser", "testPassword", "USER", "1995-08-15");
         userRepository.save(user);
 
         String loginPayload = """
             {
                 "username": "testUser",
-                "password": "testPassword"
+                "password": "testPassword",
+                "dateOfBirth": "1995-08-15"
             }
         """;
 

@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Entity
@@ -27,6 +28,9 @@ public class User {
 
     @Column(name = "role")
     private String role;
+
+    @Column(name = "date_of_birth", nullable = false)
+    private LocalDate dateOfBirth;
 
     // maps one user to many messages
     // The List<Message> in the User entity corresponds to a collection of rows in the messages table

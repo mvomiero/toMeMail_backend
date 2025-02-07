@@ -2,8 +2,11 @@ package com.example.toMeMail.dto;
 
 import jakarta.annotation.Nullable;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Past;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
+
+import java.time.LocalDate;
 
 @Data
 public class RegisterRequestDto {
@@ -18,5 +21,7 @@ public class RegisterRequestDto {
     @Nullable
     private String role;
 
+    @Past(message = "Date of birth must be in the past")
+    private LocalDate dateOfBirth;
 }
 

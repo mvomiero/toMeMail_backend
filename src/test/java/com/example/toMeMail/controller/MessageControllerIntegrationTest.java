@@ -52,7 +52,7 @@ class MessageControllerIntegrationTest {
         messageRepository.deleteAll();
         userRepository.deleteAll();
 
-        testUser = testDataFactory.createTestUser("TestUser", "password123", "USER");
+        testUser = testDataFactory.createTestUser("TestUser", "password123", "USER", "1995-08-15");
 
         // Generate JWT
         jwtToken = generateJwtToken(testUser.getUsername());
@@ -67,7 +67,8 @@ class MessageControllerIntegrationTest {
                         .content("""
                         {
                           "username": "%s",
-                          "password": "password123"
+                          "password": "password123",
+                          "dateOfBirth": "1995-08-15"
                         }
                         """.formatted(username)))
                 .andReturn()
@@ -143,7 +144,7 @@ class MessageControllerIntegrationTest {
     @Test
     void getMessageById_withWrongUser_shouldReturnForbidden() throws Exception {
 
-        User user2 = testDataFactory.createTestUser("TestUser2", "password123", "USER");
+        User user2 = testDataFactory.createTestUser("TestUser2", "password123", "USER", "1995-08-15");
 
         Message message = testDataFactory.createTestMessage("Message 1", LocalDateTime.now(), user2);
 
