@@ -28,6 +28,10 @@ public class Message {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime dueDate;
 
+    @Column(name = "creation_date", nullable = false, updatable = false)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
+    private LocalDateTime creationDate;
+
     // maps many messages to one user
     // Hibernate sees that a Message has a single User (user field),
     // and this is stored in the user_id foreign key column.
@@ -35,5 +39,10 @@ public class Message {
     @JoinColumn(name = "user_id", nullable = false)
     @JsonIgnore
     private User user;
+
+    @PrePersist
+    protected void onCreate() {
+        this.creationDate = LocalDateTime.now(); // Automatically set creation date
+    }
 
 }
