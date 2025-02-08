@@ -48,7 +48,8 @@ public class AuthController {
             userService.registerUser(
                     registerRequest.getUsername(),
                     registerRequest.getPassword(),
-                    role
+                    role,
+                    registerRequest.getDateOfBirth()
             );
             return ResponseEntity.status(HttpStatus.CREATED).body(new RegisterResponseDto("User registered successfully"));
         } catch (IllegalArgumentException e) {

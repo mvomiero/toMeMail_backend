@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+
 @Service
 public class UserService {
 
@@ -18,7 +20,7 @@ public class UserService {
         this.passwordEncoder = passwordEncoder;
     }
 
-    public User registerUser(String username, String rawPassword, String role) {
+    public User registerUser(String username, String rawPassword, String role, LocalDate dateOfBirth) {
         // Check if the user already exists
         if (userRepository.findByUsername(username).isPresent()) {
             throw new IllegalArgumentException("Username already exists");
@@ -32,6 +34,7 @@ public class UserService {
         user.setUsername(username);
         user.setPassword(encodedPassword);
         user.setRole(role);
+        user.setDateOfBirth(dateOfBirth);
         return userRepository.save(user);
     }
 }

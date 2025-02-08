@@ -8,6 +8,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Component
@@ -18,11 +19,12 @@ public class TestDataFactory {
     private final PasswordEncoder passwordEncoder;
     private final MessageRepository messageRepository;
 
-    public User createTestUser(String username, String password, String role) {
+    public User createTestUser(String username, String password, String role, String birthDate) {
         User user = new User();
         user.setUsername(username);
         user.setPassword(passwordEncoder.encode(password));
         user.setRole(role);
+        user.setDateOfBirth(LocalDate.parse(birthDate));
         return userRepository.save(user);
     }
 

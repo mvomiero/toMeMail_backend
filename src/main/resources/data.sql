@@ -1,6 +1,6 @@
 -- Insert Users with pre-hashed passwords
-INSERT INTO users (id, user_name, password, role) VALUES
-(1, 'alice', '$2a$10$P6BqKbu29rxQkzB2cPX.z.oANqBZ/TpQxA63HKUeYqGuxKKzBHiXC', 'USER');
+INSERT INTO users (id, user_name, password, role, date_of_birth) VALUES
+(1, 'alice', '$2a$10$P6BqKbu29rxQkzB2cPX.z.oANqBZ/TpQxA63HKUeYqGuxKKzBHiXC', 'USER', '1995-08-15');
 -- password = 'testPassword'
 
 -- Insert Messages linked to users
