@@ -7,6 +7,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import java.time.LocalDate;
 
 import java.time.LocalDateTime;
 
@@ -25,12 +26,10 @@ public class Message {
     private String content;
 
     @Column(name = "due_date", nullable = false)
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
-    private LocalDateTime dueDate;
+    private LocalDate dueDate;
 
     @Column(name = "creation_date", nullable = false, updatable = false)
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
-    private LocalDateTime creationDate;
+    private LocalDate creationDate;
 
     // maps many messages to one user
     // Hibernate sees that a Message has a single User (user field),
@@ -42,7 +41,7 @@ public class Message {
 
     @PrePersist
     protected void onCreate() {
-        this.creationDate = LocalDateTime.now(); // Automatically set creation date
+        this.creationDate = LocalDate.now(); // Automatically set creation date
     }
 
 }

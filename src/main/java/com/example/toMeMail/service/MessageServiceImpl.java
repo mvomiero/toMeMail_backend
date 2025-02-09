@@ -15,6 +15,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -53,7 +54,7 @@ public class MessageServiceImpl implements MessageService {
         if (!message.getUser().getUsername().equals(getAuthenticatedUsername())) {
             throw new AccessDeniedException("You are not authorized to access this message");
         }
-        if (message.getDueDate().isAfter(LocalDateTime.now())) {
+        if (message.getDueDate().isAfter(LocalDate.now())) {
             throw new MessageAccessBeforeDueDateException(MessageAccessBeforeDueDateException.MESSAGE);
         }
         return message;

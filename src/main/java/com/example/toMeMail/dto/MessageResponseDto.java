@@ -13,8 +13,8 @@ import java.time.Period;
 public class MessageResponseDto {
     private Long id;
     private String content;
-    private LocalDateTime dueDate;
-    private LocalDateTime creationDate;
+    private LocalDate dueDate;
+    private LocalDate creationDate;
     private int senderAge;
     private int recipientAge;
 
@@ -26,8 +26,8 @@ public class MessageResponseDto {
 
         // Calculate ages
         LocalDate birthDate = message.getUser().getDateOfBirth();
-        this.senderAge = calculateAge(birthDate, creationDate.toLocalDate());
-        this.recipientAge = calculateAge(birthDate, dueDate.toLocalDate());
+        this.senderAge = calculateAge(birthDate, creationDate);
+        this.recipientAge = calculateAge(birthDate, dueDate);
     }
 
     private int calculateAge(LocalDate birthDate, LocalDate referenceDate) {
