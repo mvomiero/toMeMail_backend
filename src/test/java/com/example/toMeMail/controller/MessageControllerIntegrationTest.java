@@ -17,7 +17,7 @@ import org.springframework.http.MediaType;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -117,7 +117,7 @@ class MessageControllerIntegrationTest {
     @Test
     void getMessageById_shouldReturnOk() throws Exception {
 
-        Message message = testDataFactory.createTestMessage("Test Message Content", LocalDateTime.now(), testUser);
+        Message message = testDataFactory.createTestMessage("Test Message Content", LocalDate.now(), testUser);
 
         mockMvc.perform(get("/messages/" + message.getId())
                         .contentType(MediaType.APPLICATION_JSON)
@@ -130,7 +130,7 @@ class MessageControllerIntegrationTest {
     @Test
     void getMessageById_withLaterDate_shouldReturnForbidden() throws Exception {
 
-        Message message = testDataFactory.createTestMessage("Test Message Content", LocalDateTime.now().plusYears(100), testUser);
+        Message message = testDataFactory.createTestMessage("Test Message Content", LocalDate.now().plusYears(100), testUser);
 
         mockMvc.perform(get("/messages/" + message.getId())
                         .contentType(MediaType.APPLICATION_JSON)
@@ -146,7 +146,7 @@ class MessageControllerIntegrationTest {
 
         User user2 = testDataFactory.createTestUser("TestUser2", "password123", "USER", "1995-08-15");
 
-        Message message = testDataFactory.createTestMessage("Message 1", LocalDateTime.now(), user2);
+        Message message = testDataFactory.createTestMessage("Message 1", LocalDate.now(), user2);
 
         mockMvc.perform(get("/messages/" + message.getId())
                         .contentType(MediaType.APPLICATION_JSON)
@@ -158,8 +158,8 @@ class MessageControllerIntegrationTest {
     @Test
     void getMessages_shouldReturnOk() throws Exception {
 
-        testDataFactory.createTestMessage("Message 1", LocalDateTime.now(), testUser);
-        testDataFactory.createTestMessage("Message 2", LocalDateTime.now(), testUser);
+        testDataFactory.createTestMessage("Message 1", LocalDate.now(), testUser);
+        testDataFactory.createTestMessage("Message 2", LocalDate.now(), testUser);
 
         mockMvc.perform(get("/messages")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -174,7 +174,7 @@ class MessageControllerIntegrationTest {
     @Test
     void deleteMessage_shouldReturnOkNoContent() throws Exception {
 
-        Message message = testDataFactory.createTestMessage("Message 1", LocalDateTime.now(), testUser);
+        Message message = testDataFactory.createTestMessage("Message 1", LocalDate.now(), testUser);
 
         mockMvc.perform(delete("/messages/" + message.getId())
                         .contentType(MediaType.APPLICATION_JSON)

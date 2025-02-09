@@ -28,7 +28,7 @@ public class TestDataFactory {
         return userRepository.save(user);
     }
 
-    public Message createTestMessage(String content, LocalDateTime dueDate, User user) {
+    public Message createTestMessage(String content, LocalDate dueDate, User user) {
         Message message = new Message();
         message.setContent(content);
         message.setDueDate(dueDate);
