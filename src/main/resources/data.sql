@@ -1,10 +1,9 @@
--- Insert Users with pre-hashed passwords
+-- Insert Test User (password = 'TestPassword' hashed with BCrypt)
 INSERT INTO users (user_name, password, role, date_of_birth) VALUES
-('alice', '$2a$10$P6BqKbu29rxQkzB2cPX.z.oANqBZ/TpQxA63HKUeYqGuxKKzBHiXC', 'USER', '1995-08-15');
--- password = 'testPassword'
+('testUser', '$2a$10$P6BqKbu29rxQkzB2cPX.z.oANqBZ/TpQxA63HKUeYqGuxKKzBHiXC', 'USER', '2000-01-01');
 
--- Insert Messages linked to users
+-- Insert Example Messages for testUser
 INSERT INTO messages (content, due_date, creation_date, user_id) VALUES
-('Hello Future Alice!', '2025-01-01 10:00:00', '2015-01-01 10:00:00', 1),
-('Remember to invest!', '2030-06-15 12:00:00', '2015-01-01 10:00:00', 1);
+('Welcome to the Demo!', '2025-12-31 23:59:59', '2023-12-31 23:59:59',
+  (SELECT id FROM users WHERE user_name = 'testUser'));
 
