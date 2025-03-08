@@ -137,7 +137,7 @@ class MessageControllerIntegrationTest {
                         .header("Authorization", "Bearer " + jwtToken))
                 .andDo(print())
                 .andExpect(status().isForbidden())
-                .andExpect(content().string(MessageAccessBeforeDueDateException.MESSAGE));  // Ensure the message is returned correctly
+                .andExpect(jsonPath("$.message").value(MessageAccessBeforeDueDateException.MESSAGE));
 
     }
 
