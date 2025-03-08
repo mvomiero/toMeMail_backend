@@ -32,9 +32,11 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
     }*/
     @ExceptionHandler(MessageAccessBeforeDueDateException.class)
-    public ResponseEntity<String> handleAccessBeforeDueDate(MessageAccessBeforeDueDateException ex) {
-
-        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(ex.getMessage());
+    public ResponseEntity<Map<String, String>> handleAccessBeforeDueDate(MessageAccessBeforeDueDateException ex) {
+        Map<String, String> response = new HashMap<>();
+        response.put("message", ex.getMessage());
+        response.put("dueDate", ex.getDueDate().toString());
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(response);
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
