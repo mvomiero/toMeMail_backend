@@ -2,17 +2,15 @@ package com.example.toMeMail.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalDate;
 import java.util.List;
 
 @Entity
 @Table(name = "users")
-@Getter
-@Setter
+@Data
+@NoArgsConstructor
 public class User {
 
     @Id
@@ -39,5 +37,12 @@ public class User {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore
     private List<Message> messages;
+
+    public User(String username, String password, String role, LocalDate dateOfBirth) {
+        this.username = username;
+        this.password = password;
+        this.role = role;
+        this.dateOfBirth = dateOfBirth;
+    }
 
 }

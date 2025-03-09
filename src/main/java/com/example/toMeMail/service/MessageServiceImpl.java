@@ -9,6 +9,7 @@ import com.example.toMeMail.repository.MessageRepository;
 import com.example.toMeMail.repository.UserRepository;
 import com.example.toMeMail.security.CustomUserDetails;
 import jakarta.transaction.Transactional;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.Authentication;
@@ -20,25 +21,21 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
+@AllArgsConstructor
 public class MessageServiceImpl implements MessageService {
 
-
-    @Autowired
     private UserRepository userRepository;
 
-    @Autowired
     private MessageRepository messageRepository;
 
     @Override
     @Transactional
     public Message createMessage(MessageDto messageDto) {
 
-        Message message = new Message();
-        message.setContent(messageDto.getContent());
-        message.setDueDate(messageDto.getDueDate());
-
         User user = userRepository.findByUsername(getAuthenticatedUsername()).orElseThrow(() -> new UserNotFoundException("User not found"));
-        message.setUser(user);
+
+        Message message = new Message(messageDto.getContent(), messageDto.getDueDate(), user);
+
         return messageRepository.save(message);
     }
 

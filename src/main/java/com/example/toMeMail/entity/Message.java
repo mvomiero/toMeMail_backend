@@ -3,17 +3,15 @@ package com.example.toMeMail.entity;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
+
 import java.time.LocalDate;
 
 import java.time.LocalDateTime;
 
 @Entity
-@Getter
-@Setter
+@Data
+@NoArgsConstructor
 @Table(name = "messages")
 public class Message {
 
@@ -42,6 +40,12 @@ public class Message {
     @PrePersist
     protected void onCreate() {
         this.creationDate = LocalDate.now(); // Automatically set creation date
+    }
+
+    public Message(String content, LocalDate dueDate, User user) {
+        this.content = content;
+        this.dueDate = dueDate;
+        this.user = user;
     }
 
 }
