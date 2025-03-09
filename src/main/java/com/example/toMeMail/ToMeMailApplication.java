@@ -17,12 +17,4 @@ public class ToMeMailApplication {
 		ApplicationContext context = SpringApplication.run(ToMeMailApplication.class, args);
 		//System.out.println(Arrays.toString(context.getBeanDefinitionNames()));
 	}
-
-	@Bean
-	CommandLineRunner printDatabaseUrl(DatabaseConfig databaseConfig) {
-		return args -> {
-			System.out.println("🔍 DATABASE URL: " + databaseConfig.getDatabaseUrl());
-		};
-	}
-
 }
