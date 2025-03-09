@@ -1,6 +1,7 @@
 package com.example.toMeMail.dto;
 
 import com.example.toMeMail.entity.Message;
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -8,8 +9,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.Period;
 
-@Getter
-@Setter
+@Data
 public class MessageResponseDto {
     private Long id;
     private String content;
