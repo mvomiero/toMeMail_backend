@@ -45,7 +45,7 @@ jobs:
       - name: Generate JaCoCo Badge
         uses: cicirello/jacoco-badge-generator@v2
         with:
-          jacoco-csv-file: backend/target/site/jacoco/jacoco.csv
+          jacoco-csv-file: backend/target/site/jacoco/jacoco.xml
           badges-directory: badges
 
       - name: Upload Badge
