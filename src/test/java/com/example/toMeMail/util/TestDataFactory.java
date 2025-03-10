@@ -20,19 +20,12 @@ public class TestDataFactory {
     private final MessageRepository messageRepository;
 
     public User createTestUser(String username, String password, String role, String birthDate) {
-        User user = new User();
-        user.setUsername(username);
-        user.setPassword(passwordEncoder.encode(password));
-        user.setRole(role);
-        user.setDateOfBirth(LocalDate.parse(birthDate));
+        User user = new User(username, passwordEncoder.encode(password), role, LocalDate.parse(birthDate));
         return userRepository.save(user);
     }
 
     public Message createTestMessage(String content, LocalDate dueDate, User user) {
-        Message message = new Message();
-        message.setContent(content);
-        message.setDueDate(dueDate);
-        message.setUser(user);
+        Message message = new Message(content, dueDate, user);
         return messageRepository.save(message);
     }
 }
