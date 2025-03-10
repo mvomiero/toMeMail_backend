@@ -4,7 +4,7 @@
 
 _While time travel between different versions of yourself isn’t possible, toMeMail offers the next best thing: sending a message into the future and waiting for time to pass. For example, your 30-year-old self can write a message to your 60-year-old self, creating a bridge for introspection and self-discovery._
 
-[![Coverage Status](https://coveralls.io/repos/github/mvomiero/toMeMail_backend/badge.svg?branch=main)](https://coveralls.io/github/mvomiero/toMeMail_backend?branch=main)
+[![Coverage Status](https://coveralls.io/repos/github/mvomiero/toMeMail_backend/badge.svg)](https://coveralls.io/github/mvomiero/toMeMail_backend)
 [![Build & Test](https://github.com/mvomiero/toMeMail_backend/actions/workflows/build_test.yml/badge.svg)](https://github.com/mvomiero/toMeMail_backend/actions/workflows/build_test.yml)
 [![Deploy Backend](https://github.com/mvomiero/toMeMail_backend/actions/workflows/deploy-backend.yml/badge.svg)](https://github.com/mvomiero/toMeMail_backend/actions/workflows/deploy-backend.yml)
 
