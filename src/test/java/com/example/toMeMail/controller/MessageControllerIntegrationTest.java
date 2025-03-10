@@ -56,12 +56,10 @@ class MessageControllerIntegrationTest {
 
         // Generate JWT
         jwtToken = generateJwtToken(testUser.getUsername());
-        //System.out.println("Generated JWT Token: " + jwtToken);
-
     }
 
     private String generateJwtToken(String username) throws Exception {
-        // Mock JWT generation logic or use a real JWT creation utility if available
+
         String jsonResponse = mockMvc.perform(post("/auth/login")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("""

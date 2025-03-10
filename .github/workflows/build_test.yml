@@ -39,5 +39,17 @@ jobs:
       - name: Build Backend with Maven
         run: mvn clean install
 
-      - name: Run Backend Tests
-        run: mvn test
+      - name: Run Backend Tests with Coverage
+        run: mvn verify
+
+      - name: Generate JaCoCo Badge
+        uses: cicirello/jacoco-badge-generator@v2
+        with:
+          jacoco-csv-file: backend/target/site/jacoco/jacoco.csv
+          badges-directory: badges
+
+      - name: Upload Badge
+        uses: actions/upload-artifact@v3
+        with:
+          name: coverage-badge
+          path: badges/
