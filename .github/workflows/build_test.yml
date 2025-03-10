@@ -42,10 +42,19 @@ jobs:
       - name: Run Backend Tests with Coverage
         run: mvn verify
 
+      # Debug: Check if JaCoCo files are generated
+      - name: List Generated JaCoCo Files
+        run: ls -R backend/target/site/jacoco || echo "No JaCoCo report found"
+
+      # Debug: List all files in target directory to locate JaCoCo report
+      - name: List All Build Files
+        run: find backend/target -type f | sort
+
+      # Generate JaCoCo Badge
       - name: Generate JaCoCo Badge
         uses: cicirello/jacoco-badge-generator@v2
         with:
-          jacoco-csv-file: backend/target/site/jacoco/jacoco.xml
+          jacoco-xml-file: backend/target/site/jacoco/jacoco.xml  # ✅ Adjust if necessary based on debug output
           badges-directory: badges
 
       - name: Upload Badge
