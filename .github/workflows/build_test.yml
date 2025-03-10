@@ -17,11 +17,9 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # Checkout code
       - name: Checkout code
         uses: actions/checkout@v4
 
-      # Backend CI
       - name: Set up JDK
         uses: actions/setup-java@v3
         with:
@@ -42,23 +40,5 @@ jobs:
       - name: Run Backend Tests with Coverage
         run: mvn verify
 
-      # Debug: Check if JaCoCo files are generated
-      - name: List Generated JaCoCo Files
-        run: ls -R target/site/jacoco || echo "No JaCoCo report found"
-
-      # Debug: List all files in target directory to locate JaCoCo report
-      - name: List All Build Files
-        run: find target -type f | sort
-
-      # Generate JaCoCo Badge
-      - name: Generate JaCoCo Badge
-        uses: cicirello/jacoco-badge-generator@v2
-        with:
-          jacoco-csv-file: target/site/jacoco/jacoco.csv  # ✅ Adjust if necessary based on debug output
-          badges-directory: badges
-
-      - name: Upload Badge
-        uses: actions/upload-artifact@v4
-        with:
-          name: coverage-badge
-          path: badges/
+      - name: Upload Coverage to Coveralls
+        run: mvn coveralls:report -DrepoToken=${{ secrets.COVERALLS_REPO_TOKEN }}
