@@ -50,7 +50,7 @@ public class MessageServiceImpl implements MessageService {
             throw new AccessDeniedException("You are not authorized to access this message");
         }
         if (message.getDueDate().isAfter(LocalDate.now())) {
-            throw new MessageAccessBeforeDueDateException(MessageAccessBeforeDueDateException.MESSAGE, message.getDueDate());
+            throw new MessageAccessBeforeDueDateException(message.getDueDate());
         }
         return message;
     }
