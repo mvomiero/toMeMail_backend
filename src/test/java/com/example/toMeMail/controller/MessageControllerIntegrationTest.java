@@ -5,7 +5,6 @@ import com.example.toMeMail.entity.User;
 import com.example.toMeMail.exception.MessageAccessBeforeDueDateException;
 import com.example.toMeMail.repository.MessageRepository;
 import com.example.toMeMail.repository.UserRepository;
-import com.example.toMeMail.service.CustomUserDetailsService;
 import com.example.toMeMail.util.TestDataFactory;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
@@ -19,10 +18,10 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.LocalDate;
 
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
 @AutoConfigureMockMvc

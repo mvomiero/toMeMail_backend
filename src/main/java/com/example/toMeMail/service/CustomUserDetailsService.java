@@ -1,11 +1,9 @@
 package com.example.toMeMail.service;
 
 import com.example.toMeMail.entity.User;
-//import com.example.toMeMail.exception.UserNotFoundException;
 import com.example.toMeMail.repository.UserRepository;
 import com.example.toMeMail.security.CustomUserDetails;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
