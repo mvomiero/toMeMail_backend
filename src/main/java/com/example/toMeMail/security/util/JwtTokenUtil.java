@@ -14,10 +14,12 @@ import java.util.function.Function;
 //@AllArgsConstructor
 public class JwtTokenUtil {
 
-    @Value("${SECRET_KEY}") private String SECRET_KEY;
-    private static final long JWT_EXPIRATION = 1000 * 60 * 60; // 1 h in milliseconds
+    @Value("${SECRET_KEY}")
+    private String SECRET_KEY;
 
-    // Generate a JWT token
+    @Value("${jwt.expiration}")
+    private long JWT_EXPIRATION;
+
     public String generateToken(String username) {
         return Jwts.builder()
                 .setSubject(username)
@@ -27,17 +29,14 @@ public class JwtTokenUtil {
                 .compact();
     }
 
-    // Extract the username from the token
     public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);
     }
 
-    // Check if the token is expired
     public boolean isTokenExpired(String token) {
         return extractExpiration(token).before(new Date());
     }
 
-    // Validate the token
     public boolean validateToken(String token, UserDetails userDetails) {
         String username = extractUsername(token);
         return username.equals(userDetails.getUsername()) && !isTokenExpired(token);
@@ -49,7 +48,6 @@ public class JwtTokenUtil {
         return claimsResolver.apply(claims);
     }
 
-    // Extract expiration date
     private Date extractExpiration(String token) {
         return extractClaim(token, Claims::getExpiration);
     }
