@@ -34,7 +34,6 @@ public class Message {
     // and this is stored in the user_id foreign key column.
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
-    @JsonIgnore
     private User user;
 
     @PrePersist

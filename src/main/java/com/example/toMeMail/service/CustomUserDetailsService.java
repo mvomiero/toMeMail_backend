@@ -1,7 +1,7 @@
 package com.example.toMeMail.service;
 
 import com.example.toMeMail.entity.User;
-import com.example.toMeMail.exception.UserNotFoundException;
+//import com.example.toMeMail.exception.UserNotFoundException;
 import com.example.toMeMail.repository.UserRepository;
 import com.example.toMeMail.security.CustomUserDetails;
 import lombok.AllArgsConstructor;

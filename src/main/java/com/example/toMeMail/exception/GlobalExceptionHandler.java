@@ -14,23 +14,6 @@ import java.util.Map;
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
-    /*@ExceptionHandler(IllegalArgumentException.class)
-    public ResponseEntity<Object> handleIllegalArgumentException(IllegalArgumentException ex) {
-        ErrorResponse errorResponse = new ErrorResponse("Bad Request", List.of(ex.getMessage()));
-        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
-    }
-
-    @ExceptionHandler(UserNotFoundException.class)
-    public ResponseEntity<Object> handleUserNotFoundException(UserNotFoundException ex) {
-        ErrorResponse errorResponse = new ErrorResponse("User Not Found", List.of(ex.getMessage()));
-        return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
-    }
-
-    @ExceptionHandler(Exception.class)
-    public ResponseEntity<Object> handleGeneralException(Exception ex) {
-        ErrorResponse errorResponse = new ErrorResponse("Internal Server Error", List.of(ex.getMessage()));
-        return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
-    }*/
     @ExceptionHandler(MessageAccessBeforeDueDateException.class)
     public ResponseEntity<Map<String, String>> handleAccessBeforeDueDate(MessageAccessBeforeDueDateException ex) {
         Map<String, String> response = new HashMap<>();
