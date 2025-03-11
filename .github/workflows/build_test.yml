@@ -34,16 +34,6 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-maven
 
-      - name: Check if Coveralls Token is Set
-        run: |
-          if [[ -z "${{ secrets.COVERALLS_REPO_TOKEN }}" ]]; then
-            echo "ERROR: COVERALLS_REPO_TOKEN is not set!"
-            exit 1
-          else
-            echo "COVERALLS_REPO_TOKEN is set."
-          fi
-
-
       - name: Build Backend with Maven
         run: mvn clean install
 
