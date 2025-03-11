@@ -21,14 +21,14 @@ import java.util.List;
 @RequestMapping("/messages")
 @AllArgsConstructor
 public class MessageController {
-    
+
     private MessageService messageService;
 
     @PostMapping
-    public ResponseEntity<Message> createMessage(@Valid @RequestBody MessageDto message) {
+    public ResponseEntity<MessageResponseDto> createMessage(@Valid @RequestBody MessageDto message) {
 
         Message createdMessage = messageService.createMessage(message);
-        return new ResponseEntity<>(createdMessage, HttpStatus.CREATED);
+        return new ResponseEntity<>(new MessageResponseDto(createdMessage), HttpStatus.CREATED);
     }
 
     @GetMapping("/{id}")
